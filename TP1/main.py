@@ -6,6 +6,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error,r2_score,confusion_matrix
+from sklearn.metrics import classification_report
 
 def infoCSV(csv,col):
   print("=====info======")
@@ -101,6 +102,10 @@ def main():
   print("Confusion Matrix {}".format(confusion_matrix(y_test,y_pred_mlpc)))
   print("================")
   # ======================
+
+  # ======== Classification Reports ==========
+  
+  # ==========================================
 
 
     
