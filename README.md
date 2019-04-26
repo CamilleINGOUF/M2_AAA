@@ -15,5 +15,9 @@ TP1 - Détection des fraudes
 * RandomForest
 * MLPC
 
+#### Solutions essayées
+* Supprimer des élèments de la classe la **plus** présente pour égaliser les deux classes
+* Dupliquer des élèments de la classes la **moins** présente pour égaliser les deux classes
+
 TP2
 ---
