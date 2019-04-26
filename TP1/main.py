@@ -82,7 +82,7 @@ def main():
   print("r2 {}".format(r2_score(y_pred_knn,y_test)))
   print("MAE {}".format(mean_absolute_error(y_pred_knn,y_test)))
   print("MSE {}".format(mean_squared_error(y_pred_knn,y_test)))
-  print("Score {}".format(RFC.score(X=x_test,y=y_test)))
+  print("Score {}".format(KNN.score(X=x_test,y=y_test)))
   print("Confusion Matrix {}".format(confusion_matrix(y_test,y_pred_knn)))
   print("================")
   # ======================
@@ -98,13 +98,18 @@ def main():
   print("r2 {}".format(r2_score(y_pred_mlpc,y_test)))
   print("MAE {}".format(mean_absolute_error(y_pred_mlpc,y_test)))
   print("MSE {}".format(mean_squared_error(y_pred_mlpc,y_test)))
-  print("Score {}".format(RFC.score(X=x_test,y=y_test)))
+  print("Score {}".format(mlpc.score(X=x_test,y=y_test)))
   print("Confusion Matrix {}".format(confusion_matrix(y_test,y_pred_mlpc)))
   print("================")
   # ======================
 
   # ======== Classification Reports ==========
-  
+  print("===== Classification Reports =====")
+  print("Tree {}".format(print(classification_report(y_test, y_pred_tree))))
+  print("RFC {}".format(print(classification_report(y_test, y_pred_rfc))))
+  print("KNN {}".format(print(classification_report(y_test, y_pred_knn))))
+  print("MLPC {}".format(print(classification_report(y_test, y_pred_mlpc))))
+  print("==================================")
   # ==========================================
 
 
