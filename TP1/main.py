@@ -52,11 +52,11 @@ def delete_class_0(data):
 def duplicate_class_1(data):
   class_0 = data[data["Class"] == 0]
   class_1 = data[data["Class"] == 1]
-  data.append([class_1]*500, ignore_index=True)
+  class_1 = pandas.concat([class_1]*500, ignore_index=0)
   class_0.append(class_1)
   return data
 
-def do_algos(csv, f):
+def do_algos(csv, f = None):
   x_train,y_train,x_test,y_test = split_csv_x_y(csv,"Class", f)
 
   # ======= TREE =========
@@ -132,7 +132,8 @@ def do_algos(csv, f):
 
 def main():
   csv = pandas.read_csv("creditcard.csv") 
-  # infoCSV(csv, "Class")  
+  # infoCSV(csv, "Class")
+  # do_algos(csv)  
   # do_algos(csv, delete_class_0)
   do_algos(csv, duplicate_class_1)
 
