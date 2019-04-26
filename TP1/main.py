@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error,r2_score,confusion_matrix
 from sklearn.metrics import classification_report
 
-def infoCSV(csv,col):
+def infoCSV(csv,col = None):
   print("=====info======")
   print(csv.shape)
   print(csv.head())
@@ -19,8 +19,11 @@ def infoCSV(csv,col):
   print("===============")
 
 
-def split_csv_x_y(csv,y_name):
+def split_csv_x_y(csv,y_name, f):
   train,test = train_test_split(csv,test_size=0.3333)
+
+  if f != None:
+    train = f(train)
 
   x_train = train
   y_train = x_train[y_name]
@@ -36,10 +39,25 @@ def split_csv_x_y(csv,y_name):
     
   return x_train,y_train, x_test, y_test
 
-def main():
-  csv = pandas.read_csv("creditcard.csv") 
-  # infoCSV(csv, "Class")  
-  x_train,y_train,x_test,y_test = split_csv_x_y(csv,"Class")
+# Reduce class 0 count to Class 1 count
+def delete_class_0(data):
+  class_0 = data[data["Class"] == 0]
+  class_1 = data[data["Class"] == 1]
+  class_0 = class_0[:len(class_1)]
+  class_0.append(class_1)
+  return class_0
+
+
+# Reduce class 0 count to Class 1 count
+def duplicate_class_1(data):
+  class_0 = data[data["Class"] == 0]
+  class_1 = data[data["Class"] == 1]
+  data.append([class_1]*500, ignore_index=True)
+  class_0.append(class_1)
+  return data
+
+def do_algos(csv, f):
+  x_train,y_train,x_test,y_test = split_csv_x_y(csv,"Class", f)
 
   # ======= TREE =========
   classifierTree = tree.DecisionTreeClassifier(criterion='entropy')
@@ -50,8 +68,8 @@ def main():
   print("r2 {}".format(r2_score(y_pred_tree,y_test)))
   print("MAE {}".format(mean_absolute_error(y_pred_tree,y_test)))
   print("MSE {}".format(mean_squared_error(y_pred_tree,y_test)))
-  print("Score {}".format(classifierTree.score(X=x_test,y=y_test)))
-  print("Confusion Matrix {}".format(confusion_matrix(y_test,y_pred_tree)))
+  # print("Score {}".format(classifierTree.score(X=x_test,y=y_test)))
+  print("Confusion Matrix \n {}".format(confusion_matrix(y_test,y_pred_tree)))
   print("================")
   # ======================
 
@@ -66,8 +84,8 @@ def main():
   print("r2 {}".format(r2_score(y_pred_rfc,y_test)))
   print("MAE {}".format(mean_absolute_error(y_pred_rfc,y_test)))
   print("MSE {}".format(mean_squared_error(y_pred_rfc,y_test)))
-  print("Score {}".format(RFC.score(X=x_test,y=y_test)))
-  print("Confusion Matrix {}".format(confusion_matrix(y_test,y_pred_rfc)))
+  # print("Score {}".format(RFC.score(X=x_test,y=y_test)))
+  print("Confusion Matrix \n {}".format(confusion_matrix(y_test,y_pred_rfc)))
   print("================")
   # ======================
 
@@ -82,8 +100,8 @@ def main():
   print("r2 {}".format(r2_score(y_pred_knn,y_test)))
   print("MAE {}".format(mean_absolute_error(y_pred_knn,y_test)))
   print("MSE {}".format(mean_squared_error(y_pred_knn,y_test)))
-  print("Score {}".format(KNN.score(X=x_test,y=y_test)))
-  print("Confusion Matrix {}".format(confusion_matrix(y_test,y_pred_knn)))
+  # print("Score {}".format(KNN.score(X=x_test,y=y_test)))
+  print("Confusion Matrix \n {}".format(confusion_matrix(y_test,y_pred_knn)))
   print("================")
   # ======================
 
@@ -98,19 +116,25 @@ def main():
   print("r2 {}".format(r2_score(y_pred_mlpc,y_test)))
   print("MAE {}".format(mean_absolute_error(y_pred_mlpc,y_test)))
   print("MSE {}".format(mean_squared_error(y_pred_mlpc,y_test)))
-  print("Score {}".format(mlpc.score(X=x_test,y=y_test)))
-  print("Confusion Matrix {}".format(confusion_matrix(y_test,y_pred_mlpc)))
+  # print("Score {}".format(mlpc.score(X=x_test,y=y_test)))
+  print("Confusion Matrix \n {}".format(confusion_matrix(y_test,y_pred_mlpc)))
   print("================")
   # ======================
 
   # ======== Classification Reports ==========
   print("===== Classification Reports =====")
-  print("Tree {}".format(print(classification_report(y_test, y_pred_tree))))
-  print("RFC {}".format(print(classification_report(y_test, y_pred_rfc))))
-  print("KNN {}".format(print(classification_report(y_test, y_pred_knn))))
-  print("MLPC {}".format(print(classification_report(y_test, y_pred_mlpc))))
+  print("Tree {}".format(classification_report(y_test, y_pred_tree)))
+  print("RFC {}".format(classification_report(y_test, y_pred_rfc)))
+  print("KNN {}".format(classification_report(y_test, y_pred_knn)))
+  print("MLPC {}".format(classification_report(y_test, y_pred_mlpc)))
   print("==================================")
   # ==========================================
+
+def main():
+  csv = pandas.read_csv("creditcard.csv") 
+  # infoCSV(csv, "Class")  
+  # do_algos(csv, delete_class_0)
+  do_algos(csv, duplicate_class_1)
 
 
     
